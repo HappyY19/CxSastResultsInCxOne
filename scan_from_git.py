@@ -109,24 +109,24 @@ def scan_from_git(team_full_name, project_name, report_type, git_repo_url, branc
     projects_api.set_project_exclude_settings_by_project_id(project_id, exclude_folders_pattern="",
                                                             exclude_files_pattern="")
 
-    # # 8. create new scan, will get a scan id
-    # print("8. create new scan, will get a scan id")
-    # scan = scan_api.create_new_scan(project_id=project_id)
-    # scan_id = scan.id
-    # print("scan_id : {}".format(scan_id))
-    #
-    # # 9. get scan details by scan id
-    # print("9. get scan details by scan id")
-    # while True:
-    #     scan_detail = scan_api.get_sast_scan_details_by_scan_id(scan_id=scan_id)
-    #     scan_status = scan_detail.status.name
-    #     print("scan_status: {}".format(scan_status))
-    #     if scan_status == "Finished":
-    #         break
-    #     elif scan_status == "Failed":
-    #         return
-    #     time.sleep(10)
-    scan_id = 1000135
+    # 8. create new scan, will get a scan id
+    print("8. create new scan, will get a scan id")
+    scan = scan_api.create_new_scan(project_id=project_id)
+    scan_id = scan.id
+    print("scan_id : {}".format(scan_id))
+
+    # 9. get scan details by scan id
+    print("9. get scan details by scan id")
+    while True:
+        scan_detail = scan_api.get_sast_scan_details_by_scan_id(scan_id=scan_id)
+        scan_status = scan_detail.status.name
+        print("scan_status: {}".format(scan_status))
+        if scan_status == "Finished":
+            break
+        elif scan_status == "Failed":
+            return
+        time.sleep(10)
+
     # 11[optional]. get statistics results by scan id
     print("11[optional]. get statistics results by scan id")
     statistics = scan_api.get_statistics_results_by_scan_id(scan_id=scan_id)
