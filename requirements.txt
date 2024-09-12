@@ -1,2 +1,2 @@
-CheckmarxPythonSDK==0.9.8
+CheckmarxPythonSDK==1.0.0
 beautifulsoup4==4.12.3

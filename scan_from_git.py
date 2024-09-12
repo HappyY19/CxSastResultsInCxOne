@@ -109,24 +109,24 @@ def scan_from_git(team_full_name, project_name, report_type, git_repo_url, branc
     projects_api.set_project_exclude_settings_by_project_id(project_id, exclude_folders_pattern="",
                                                             exclude_files_pattern="")
 
-    # 8. create new scan, will get a scan id
-    print("8. create new scan, will get a scan id")
-    scan = scan_api.create_new_scan(project_id=project_id)
-    scan_id = scan.id
-    print("scan_id : {}".format(scan_id))
-
-    # 9. get scan details by scan id
-    print("9. get scan details by scan id")
-    while True:
-        scan_detail = scan_api.get_sast_scan_details_by_scan_id(scan_id=scan_id)
-        scan_status = scan_detail.status.name
-        print("scan_status: {}".format(scan_status))
-        if scan_status == "Finished":
-            break
-        elif scan_status == "Failed":
-            return
-        time.sleep(10)
-
+    # # 8. create new scan, will get a scan id
+    # print("8. create new scan, will get a scan id")
+    # scan = scan_api.create_new_scan(project_id=project_id)
+    # scan_id = scan.id
+    # print("scan_id : {}".format(scan_id))
+    #
+    # # 9. get scan details by scan id
+    # print("9. get scan details by scan id")
+    # while True:
+    #     scan_detail = scan_api.get_sast_scan_details_by_scan_id(scan_id=scan_id)
+    #     scan_status = scan_detail.status.name
+    #     print("scan_status: {}".format(scan_status))
+    #     if scan_status == "Finished":
+    #         break
+    #     elif scan_status == "Failed":
+    #         return
+    #     time.sleep(10)
+    scan_id = 1000135
     # 11[optional]. get statistics results by scan id
     print("11[optional]. get statistics results by scan id")
     statistics = scan_api.get_statistics_results_by_scan_id(scan_id=scan_id)
@@ -178,7 +178,7 @@ if __name__ == "__main__":
         for index, pre in enumerate(soup.find_all('pre')):
             if index < 2:
                 for child in pre.descendants:
-                    print(child)
+                    # print(child)
                     if child.name == "p":
                         query_risk.append(child.text)
                     if child.name == "li":
@@ -195,6 +195,7 @@ if __name__ == "__main__":
         query_risk_dict.update({query_id: query_risk})
         query_recommendation = "\n".join(query_recommendation)
         query_recommendation_dict.update({query_id: query_recommendation})
+        time.sleep(1)
     sarif_result = create_sarif_report_from_sast_xml(
         xml_path=None,
         xml_string=report_content,
@@ -205,7 +206,7 @@ if __name__ == "__main__":
     with open('data.sarif', 'w') as f:
         json.dump(sarif_result_dict, f)
     with ZipFile('data.zip', 'w') as myzip:
-        myzip.write('eggs.txt')
+        myzip.write('data.sarif')
     url = create_a_pre_signed_url_to_upload_files()
     print("upload_url: {}".format(url))
     result = upload_zip_content_for_scanning(
